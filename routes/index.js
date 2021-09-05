@@ -14,7 +14,10 @@ router.get('/', ensureGuest, (req, res) => {
 //dashboard page
 //GET /dashboard
 router.get('/dashboard', ensureAuth, (req, res) => {
-  res.render('dashboard');
+  res.render('dashboard', {
+    //pass in username from google login to display in the dashboard (views> dashboard)
+    name: req.user.firstName,
+  });
 });
 
 module.exports = router;

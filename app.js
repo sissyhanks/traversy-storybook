@@ -3,14 +3,17 @@
 const path = require('path');
 //first things first... then declared const app line
 const express = require('express');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 //fourth .. to show any requests in console ... then wrote if development line to only use morgan logging in development
 const morgan = require('morgan');
 //fifth .. then set up view engine lines
 const exphbs  = require('express-handlebars');
-//eight requier passport and set up session.. have created  api key &* client secret added to env and laos requiring passport config under config and added passport middleware under set handlebars as view engin  BUT FIRST session middleware must be above passport middleware
+//eight require passport and set up session.. have created  api key &* client secret added to env and laos requiring passport config under config and added passport middleware under set handlebars as view engin  BUT FIRST session middleware must be above passport middleware and brought in mongoose above
 const passport = require('passport');
 const session = require('express-session');
+//ten add user session to database so saved and not kicked out when server restarts >> also add ne mongo store to session middleware
+const MongoStore = require('connect-mongo');
 //third tier step >>set up db.js in config folder  then wrote connectDB line
 const connectDB = require('./config/db');
 
@@ -41,7 +44,8 @@ app.use(session({
   resave: false,
   //switch save unitinilized to false from default meant don't create session until something is stored
   saveUninitialized: false,
-}))
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
+}));
 
 //passport middleware 
 app.use(passport.initialize());
