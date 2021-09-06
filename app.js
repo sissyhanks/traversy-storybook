@@ -55,9 +55,11 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //six .. Routes
-app.use('/', require('./routes/index'));
+app.use('/', require('./routes'));
 //nine .. add the auth routes created 
 app.use('/auth', require('./routes/auth'));
+//eleven .. add route to add stories page, after making story model, hb page and route
+app.use('/stories', require('./routes/stories'));
 
 //second tier >> after set up config.env in config folder.. then did app listen line
 const PORT = process.env.PORT || 5000;
