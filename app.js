@@ -27,6 +27,10 @@ connectDB();
 
 const app = express();
 
+// twelve .. body parser middleware to use req.body .. updated in process stories route
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 if (process.env.NODE_ENV === 'development') {
   //if development environment use morgan logging middleware 
   app.use(morgan('dev'));
