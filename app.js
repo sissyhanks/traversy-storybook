@@ -36,9 +36,15 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-//setting view engin & add capability pf using .hbs extension (instead of have to type out handlebars)
+// thirteen bringing in handlebar helpers created in the newly created helpers file >> and added helpers object to app.engine below >> and added formant date before created at date line to dashboard view that passes the date created at into the format date helper function and then after created at added date output expected formatting to then display formatted date
+// inside curly braces is destructuring ?? what is that???
+const { formatDate } = require('./helpers/hbs');
+
+//setting view engin & add capability pf using .hbs extension (instead of have to type out handlebars) 
 // also set default layout tha wraps around other everything, has html; head & body tags & stuff you  don't want to have to repeat that wraps around views >> then set up main & sign in templates in views/layouts and the routes folder with index,
-app.engine('.hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }));
+app.engine('.hbs', exphbs({ helpers: {
+  formatDate,
+}, defaultLayout: 'main', extname: '.hbs' }));
 app.set('view engine', '.hbs');
 
 //session middleware
