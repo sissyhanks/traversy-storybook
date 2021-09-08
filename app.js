@@ -9,6 +9,8 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 //fifth .. then set up view engine lines
 const exphbs  = require('express-handlebars');
+// fourteen  & app.use metthod ovberride below
+const methodOverride = require ('method-override');
 //eight require passport and set up session.. have created  api key &* client secret added to env and laos requiring passport config under config and added passport middleware under set handlebars as view engin  BUT FIRST session middleware must be above passport middleware and brought in mongoose above
 const passport = require('passport');
 const session = require('express-session');
@@ -31,6 +33,16 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+//method override middleware
+app.use(methodOverride(function (req, res) {
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    // look in urlencoded POST bodies and delete it
+    let method = req.body._method
+    delete req.body._method
+    return method
+  }
+}));
+
 if (process.env.NODE_ENV === 'development') {
   //if development environment use morgan logging middleware 
   app.use(morgan('dev'));
@@ -38,7 +50,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // thirteen bringing in handlebar helpers created in the newly created helpers file >> and added helpers object to app.engine below >> and added formant date before created at date line to dashboard view that passes the date created at into the format date helper function and then after created at added date output expected formatting to then display formatted date
 // inside curly braces is destructuring ?? what is that???
-const { formatDate, stripTags, truncate, stripSpace, editIcon } = require('./helpers/hbs');
+const { formatDate, stripTags, truncate, stripSpace, editIcon, select } = require('./helpers/hbs');
 
 //setting view engin & add capability pf using .hbs extension (instead of have to type out handlebars) 
 // also set default layout tha wraps around other everything, has html; head & body tags & stuff you  don't want to have to repeat that wraps around views >> then set up main & sign in templates in views/layouts and the routes folder with index,
@@ -48,6 +60,7 @@ app.engine('.hbs', exphbs({ helpers: {
   truncate,
   stripSpace,
   editIcon,
+  select,
 }, defaultLayout: 'main', extname: '.hbs' }));
 app.set('view engine', '.hbs');
 
