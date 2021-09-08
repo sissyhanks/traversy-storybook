@@ -4,7 +4,8 @@
     <div class="col s12 m4">
       <div class="card">
         <div class="card-image">
-          {{!-- to do edit icon --}}
+          {{!-- pass in the user id of the person who's stury is displaied and the ../user going up one level to the user who is logged in > but we are in a loop so hb does not know who the global user is  --}}
+          {{{editIcon user ../user _id}}}
         </div>
         <div class="card-content center-align">
           <h5>{{title}}</h5>

@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // thirteen bringing in handlebar helpers created in the newly created helpers file >> and added helpers object to app.engine below >> and added formant date before created at date line to dashboard view that passes the date created at into the format date helper function and then after created at added date output expected formatting to then display formatted date
 // inside curly braces is destructuring ?? what is that???
-const { formatDate, stripTags, truncate, stripSpace } = require('./helpers/hbs');
+const { formatDate, stripTags, truncate, stripSpace, editIcon } = require('./helpers/hbs');
 
 //setting view engin & add capability pf using .hbs extension (instead of have to type out handlebars) 
 // also set default layout tha wraps around other everything, has html; head & body tags & stuff you  don't want to have to repeat that wraps around views >> then set up main & sign in templates in views/layouts and the routes folder with index,
@@ -47,6 +47,7 @@ app.engine('.hbs', exphbs({ helpers: {
   stripTags,
   truncate,
   stripSpace,
+  editIcon,
 }, defaultLayout: 'main', extname: '.hbs' }));
 app.set('view engine', '.hbs');
 
@@ -63,6 +64,12 @@ app.use(session({
 //passport middleware 
 app.use(passport.initialize());
 app.use(passport.session());
+
+//fourteen making express global varable of user that hb can read inside (story) loop
+app.use(function (req, res, next) {
+  res.locals.user = req.user || null
+  next();
+})
 
 // seven Static files served >> also added path as dependency at top
 app.use(express.static(path.join(__dirname, 'public')));
